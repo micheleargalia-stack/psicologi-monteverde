@@ -27,6 +27,15 @@
       <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
       <button type="submit" id="submit-btn">Accedi</button>
     </form>
+    <p id="forgot-wrap" style="display:none;margin-top:4px;">
+      <a href="#" id="forgot-link" style="font-family:sans-serif;font-size:13px;color:#5B6459;">Password dimenticata o mai impostata?</a>
+    </p>
+
+    <form id="setpass-form" style="display:none;">
+      <p style="font-family:sans-serif;font-size:14px;color:#5B6459;margin:0 0 14px;">Crea la tua password per accedere al pannello.</p>
+      <input type="password" id="new-password" placeholder="Nuova password (almeno 6 caratteri)" required minlength="6" autocomplete="new-password">
+      <button type="submit" id="setpass-btn">Salva password e accedi</button>
+    </form>
 
     <button id="relogin-btn" style="display:none;">Esci e riprova (sessione bloccata)</button>
   </div>
@@ -46,6 +55,10 @@
     const loginForm = document.getElementById('login-form');
     const submitBtn = document.getElementById('submit-btn');
     const reloginBtn = document.getElementById('relogin-btn');
+    const forgotWrap = document.getElementById('forgot-wrap');
+    const forgotLink = document.getElementById('forgot-link');
+    const setpassForm = document.getElementById('setpass-form');
+    const setpassBtn = document.getElementById('setpass-btn');
 
     function setStatus(msg, isError) {
       statusText.textContent = msg;
@@ -110,6 +123,94 @@
       window.netlifyIdentity.logout().then(() => location.reload());
     });
 
+    // Chi non ha mai impostato una password (nuovo utente invitato) o l'ha
+    // dimenticata può farsi mandare un link per crearne una — senza questo
+    // il form di login sopra non ha nulla con cui verificare l'accesso.
+    forgotLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      if (!email) {
+        setStatus('Scrivi prima la tua email qui sopra, poi clicca di nuovo su questo link.', true);
+        return;
+      }
+      forgotLink.textContent = 'Invio in corso…';
+      window.netlifyIdentity.gotrue.requestPasswordRecovery(email)
+        .then(() => {
+          setStatus('Email inviata: controlla la posta (anche lo spam) e clicca il link per creare la password.', false);
+          forgotLink.textContent = 'Password dimenticata o mai impostata?';
+        })
+        .catch(err => {
+          setStatus('Invio non riuscito: ' + (err.message || 'riprova.'), true);
+          forgotLink.textContent = 'Password dimenticata o mai impostata?';
+        });
+    });
+
+    // Gestisce i link di invito (#invite_token=...) e di recupero password
+    // (#recovery_token=...) con questa stessa pagina invece che con il popup
+    // standard di Netlify Identity, che si è dimostrato inaffidabile.
+    let pendingInviteToken = null;
+    let pendingRecoveredUser = null;
+
+    function showSetPasswordForm() {
+      loginForm.style.display = 'none';
+      forgotWrap.style.display = 'none';
+      setpassForm.style.display = 'block';
+    }
+
+    function handleAuthTokenInHash() {
+      const match = (location.hash || '').match(/(confirmation|invite|recovery|email_change)_token=([^&]+)/);
+      if (!match) return false;
+      const [, type, token] = match;
+      location.hash = '';
+
+      if (type === 'invite') {
+        pendingInviteToken = token;
+        setStatus('', false);
+        showSetPasswordForm();
+        return true;
+      }
+
+      if (type === 'recovery') {
+        setStatus('Verifico il link…', false);
+        window.netlifyIdentity.gotrue.recover(token, true)
+          .then(user => {
+            pendingRecoveredUser = user;
+            setStatus('', false);
+            showSetPasswordForm();
+          })
+          .catch(err => {
+            setStatus('Link non valido o scaduto: ' + (err.message || 'richiedine uno nuovo.'), true);
+            loginForm.style.display = 'block';
+            forgotWrap.style.display = 'block';
+          });
+        return true;
+      }
+
+      return false;
+    }
+
+    setpassForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      setpassBtn.disabled = true;
+      setpassBtn.textContent = 'Salvataggio…';
+      const newPassword = document.getElementById('new-password').value;
+
+      const action = pendingInviteToken
+        ? window.netlifyIdentity.gotrue.acceptInvite(pendingInviteToken, newPassword, true)
+        : pendingRecoveredUser.update({ password: newPassword });
+
+      action
+        .then(user => {
+          setStatus('Password creata, accesso in corso…', false);
+          startCMS(user);
+        })
+        .catch(err => {
+          setStatus('Non sono riuscito a salvare la password: ' + (err.message || 'riprova.'), true);
+          setpassBtn.disabled = false;
+          setpassBtn.textContent = 'Salva password e accedi';
+        });
+    });
+
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       submitBtn.disabled = true;
@@ -132,24 +233,29 @@
 
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on('init', user => {
+        if (handleAuthTokenInHash()) return;
         if (user) {
           setStatus('Sessione trovata, verifico l\'accesso…', false);
           startCMS(user);
         } else {
           setStatus('Inserisci le tue credenziali per accedere.', false);
           loginForm.style.display = 'block';
+          forgotWrap.style.display = 'block';
         }
       });
       window.netlifyIdentity.on('error', err => {
         setStatus('Errore del sistema di login: ' + (err && err.message ? err.message : String(err)), true);
         loginForm.style.display = 'block';
+        forgotWrap.style.display = 'block';
       });
       window.netlifyIdentity.init();
       // Se dopo 6 secondi non è successo nulla (script non inizializzato), mostra comunque il modulo
       setTimeout(() => {
-        if (loginForm.style.display === 'none' && document.getElementById('login-box').style.display !== 'none') {
+        const nothingShown = loginForm.style.display === 'none' && setpassForm.style.display === 'none';
+        if (nothingShown && document.getElementById('login-box').style.display !== 'none') {
           setStatus('Inserisci le tue credenziali per accedere.', false);
           loginForm.style.display = 'block';
+          forgotWrap.style.display = 'block';
         }
       }, 6000);
     } else {
