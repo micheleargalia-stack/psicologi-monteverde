@@ -128,7 +128,12 @@
       }
 
       try {
-        const yamlText = await (await fetch('/admin/config.yml')).text();
+        // Cache-busting come per il resto del sito (vedi CLAUDE.md): senza
+        // questo il browser/CDN può servire una versione vecchia del file,
+        // con collezioni ormai rimosse/rinominate — è quello che ha causato
+        // "collections must be unique" anche con un config di test ridotto
+        // a una sola collezione, dove l'errore era altrimenti impossibile.
+        const yamlText = await (await fetch(`/admin/config.yml?t=${Date.now()}`, { cache: 'no-store' })).text();
         const config = jsyaml.load(yamlText);
         if (allowed !== null) {
           config.collections = config.collections.filter(c => allowed.includes(c.name));
