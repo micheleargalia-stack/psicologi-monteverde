@@ -135,6 +135,12 @@
         // a una sola collezione, dove l'errore era altrimenti impossibile.
         const yamlText = await (await fetch(`/admin/config.yml?t=${Date.now()}`, { cache: 'no-store' })).text();
         const config = jsyaml.load(yamlText);
+        // La CAUSA REALE di "collections must be unique": passando un config
+        // già pronto a CMS.init(), Decap non lo usa e basta — scarica DI
+        // NUOVO config.yml per conto suo e unisce (deepmerge) le due copie,
+        // duplicando ogni collezione. Questo flag gli dice di non scaricarlo
+        // una seconda volta e di fidarsi solo di quello che gli passiamo.
+        config.load_config_file = false;
         if (allowed !== null) {
           config.collections = config.collections.filter(c => allowed.includes(c.name));
         }
@@ -146,8 +152,6 @@
         // crash "removeChild" all'avvio. Non serve più da qui in poi: via.
         const identityIframe = document.getElementById('netlify-identity-widget');
         if (identityIframe) identityIframe.remove();
-        console.log('[debug] ruoli utente:', roles, '— collezioni permesse:', allowed);
-        console.log('[debug] nomi collezioni passati a CMS.init:', config.collections.map(c => c.name));
         CMS.init({ config });
       } catch (e) {
         setStatus('Errore nel caricamento del pannello: ' + e.message, true);
