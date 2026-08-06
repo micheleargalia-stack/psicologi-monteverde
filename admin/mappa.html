@@ -39,9 +39,22 @@
 <h1>Mappa del sito</h1>
 <p class="sub">Tutte le pagine esistenti, pubblicate o no. "Modifica" ti porta dritto alla scheda giusta nel pannello.</p>
 
-<div id="content"><p class="loading">Carico la struttura del sito…</p></div>
+<div id="content"><p class="loading">Verifico l'accesso…</p></div>
 
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script>
+  // Pagina riservata: elenca anche le bozze non pubblicate, quindi va
+  // protetta come il resto del pannello — non deve essere raggiungibile
+  // senza aver fatto login, nemmeno con l'indirizzo diretto.
+  function requireLogin() {
+    return new Promise((resolve, reject) => {
+      if (!window.netlifyIdentity) { reject(new Error('sistema di login non caricato')); return; }
+      window.netlifyIdentity.on('init', user => user ? resolve(user) : reject());
+      window.netlifyIdentity.init();
+      setTimeout(() => reject(), 6000);
+    });
+  }
+
   const GITHUB_USER = "micheleargalia-stack";
   const GITHUB_REPO = "psicologi-monteverde";
   const GITHUB_BRANCH = "main";
@@ -92,6 +105,13 @@
 
   (async () => {
     const out = document.getElementById('content');
+    try {
+      await requireLogin();
+    } catch (e) {
+      window.location.href = '/admin/';
+      return;
+    }
+    out.innerHTML = '<p class="loading">Carico la struttura del sito…</p>';
     try {
       const home = await getJSON('content/site/home.json');
 

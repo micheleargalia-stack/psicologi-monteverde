@@ -29,8 +29,10 @@
     </form>
 
     <button id="relogin-btn" style="display:none;">Esci e riprova (sessione bloccata)</button>
-    <p style="margin-top:28px;"><a href="/admin/mappa.html" style="font-family:sans-serif;font-size:13px;color:#5B6459;">🗺️ Mappa del sito (tutte le pagine)</a></p>
   </div>
+
+  <!-- Visibile solo dopo l'accesso: la mappa del sito elenca anche le bozze non pubblicate -->
+  <a id="mappa-link" href="/admin/mappa.html" style="display:none;position:fixed;top:14px;right:16px;z-index:999;font-family:sans-serif;font-size:13px;color:#5B6459;background:#F5F2EA;border:1px solid #C9C2AC;padding:6px 12px;border-radius:4px;text-decoration:none;">🗺️ Mappa del sito</a>
 
   <!-- Impedisce a Decap CMS di caricarsi da solo: lo avviamo noi dopo aver letto il ruolo -->
   <script>window.CMS_MANUAL_INIT = true;</script>
@@ -69,7 +71,9 @@
     }
 
     async function startCMS(user) {
-      const roles = (user && user.app_metadata && user.app_metadata.roles) || [];
+      // Normalizzato in minuscolo: su Netlify il ruolo può essere digitato
+      // "Admin", "ADMIN", ecc. — il confronto non deve dipendere da questo.
+      const roles = ((user && user.app_metadata && user.app_metadata.roles) || []).map(r => String(r).trim().toLowerCase());
       const allowed = getAllowedCollections(roles);
 
       if (allowed !== null && allowed.length === 0) {
@@ -86,6 +90,7 @@
           config.collections = config.collections.filter(c => allowed.includes(c.name));
         }
         document.getElementById('login-box').style.display = 'none';
+        document.getElementById('mappa-link').style.display = 'block';
         CMS.init({ config });
       } catch (e) {
         setStatus('Errore nel caricamento del pannello: ' + e.message, true);

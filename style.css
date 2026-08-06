@@ -129,8 +129,8 @@ section.block h2{font-size:clamp(28px,3vw,38px);margin-top:16px;max-width:20ch;}
 .avatar-photo{width:88px;height:88px;border-radius:50%;object-fit:cover;flex-shrink:0;}
 
 /* Servizi */
-.services{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
-.service{background:var(--paper);padding:34px 32px;min-height:180px;display:flex;flex-direction:column;}
+.services{display:flex;flex-wrap:wrap;justify-content:center;gap:1px;background:var(--line);border:1px solid var(--line);}
+.service{background:var(--paper);padding:34px 32px;min-height:180px;display:flex;flex-direction:column;flex:1 1 calc(50% - 1px);min-width:280px;}
 .service .mark{width:22px;height:22px;margin-bottom:18px;}
 .service h3{font-size:19px;margin-bottom:10px;}
 .service p{color:var(--ink-soft);font-size:15px;margin:0;}
@@ -234,7 +234,7 @@ footer .links-col a:hover{color:var(--paper);}
   .hero .wrap{grid-template-columns:1fr;}
   .vesica-box{height:180px;order:-1;}
   .team{grid-template-columns:1fr;}
-  .services{grid-template-columns:1fr;}
+  .service{flex-basis:100%;}
   .contact-grid{grid-template-columns:1fr;}
   section.block{padding:64px 0;}
   .hero{padding:56px 0 64px;}
