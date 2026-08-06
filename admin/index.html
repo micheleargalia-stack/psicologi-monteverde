@@ -113,6 +113,12 @@
         cmsInitialized = true;
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('mappa-link').style.display = 'block';
+        // Il widget Identity aggiunge un iframe a schermo intero (nascosto,
+        // usato solo per il suo popup di login che qui non impieghiamo mai)
+        // che entra in conflitto col rendering di Decap CMS e causa un
+        // crash "removeChild" all'avvio. Non serve più da qui in poi: via.
+        const identityIframe = document.getElementById('netlify-identity-widget');
+        if (identityIframe) identityIframe.remove();
         CMS.init({ config });
       } catch (e) {
         setStatus('Errore nel caricamento del pannello: ' + e.message, true);
