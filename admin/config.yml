@@ -1,0 +1,200 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Dove vengono salvate le immagini caricate dal pannello
+media_folder: "images/articoli"
+public_folder: "/images/articoli"
+
+collections:
+  - name: "pagine"
+    label: "Testi del sito"
+    files:
+      - name: "home"
+        label: "Homepage"
+        file: "content/site/home.json"
+        fields:
+          - { label: "Testo sopra il titolo", name: "heroEyebrow", widget: "string" }
+          - { label: "Titolo principale (usa *asterischi* per il corsivo)", name: "heroTitle", widget: "string" }
+          - { label: "Sottotitolo (puoi inserire link con [testo](indirizzo))", name: "heroSubtitle", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Frase in evidenza (fascia verde)", name: "introQuote", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Sopra-titolo sezione Chi siamo", name: "teamEyebrow", widget: "string" }
+          - { label: "Titolo sezione Chi siamo", name: "teamTitle", widget: "string" }
+          - { label: "Sopra-titolo sezione Servizi", name: "servicesEyebrow", widget: "string" }
+          - { label: "Titolo sezione Servizi", name: "servicesTitle", widget: "string" }
+          - { label: "Sopra-titolo sezione Contatti", name: "contactEyebrow", widget: "string" }
+          - { label: "Titolo sezione Contatti", name: "contactTitle", widget: "string" }
+          - label: "Voci del menu (in alto)"
+            name: "menuItems"
+            widget: "list"
+            fields:
+              - { label: "Testo", name: "label", widget: "string" }
+              - { label: "Collegamento", name: "link", widget: "string", hint: "Es. index.html#servizi, dizionario.html, pagina.html?slug=nome-pagina" }
+          - label: "Link utili del footer (in basso)"
+            name: "footerLinks"
+            widget: "list"
+            fields:
+              - { label: "Testo", name: "label", widget: "string" }
+              - { label: "Collegamento", name: "link", widget: "string" }
+          - label: "Social del footer"
+            name: "footerSocial"
+            widget: "list"
+            fields:
+              - { label: "Testo", name: "label", widget: "string" }
+              - { label: "Collegamento", name: "link", widget: "string" }
+          - { label: "Testo descrittivo nel footer", name: "footerTagline", widget: "text" }
+          - label: "Servizi (le 4 card della home)"
+            name: "services"
+            widget: "list"
+            fields:
+              - { label: "Titolo servizio", name: "title", widget: "string" }
+              - { label: "Descrizione (puoi inserire link con [testo](indirizzo))", name: "description", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+              - { label: "Collegamento a pagina dedicata (lascia vuoto se non ne ha una)", name: "slug", widget: "string", required: false, hint: "Es. psicoterapia-individuale — deve corrispondere a un file in Pagine servizi" }
+          - { label: "Indirizzo", name: "contactAddress", widget: "string" }
+          - { label: "Telefono", name: "contactPhone", widget: "string" }
+          - { label: "Email", name: "contactEmail", widget: "string" }
+          - { label: "Orari (una riga per giorno, formato \"Giorno: orario\")", name: "contactHours", widget: "text" }
+          - { label: "Descrizione per Google (SEO, 1-2 frasi)", name: "metaDescription", widget: "text", required: false }
+          - { label: "Immagine di anteprima social (quando il sito viene condiviso su WhatsApp/Facebook)", name: "ogImage", widget: "image", required: false }
+          - label: "Aspetto del sito"
+            name: "theme"
+            widget: "object"
+            fields:
+              - { label: "Colore principale (verde)", name: "primary", widget: "color", default: "#5F7052" }
+              - { label: "Colore di accento (cotto)", name: "accent", widget: "color", default: "#A1553A" }
+              - label: "Font dei titoli"
+                name: "headingFont"
+                widget: "select"
+                default: "Fraunces"
+                options: ["Fraunces", "Playfair Display", "Lora"]
+          - label: "Domande frequenti"
+            name: "faq"
+            widget: "list"
+            fields:
+              - { label: "Domanda", name: "question", widget: "string" }
+              - { label: "Risposta (puoi inserire link)", name: "answer", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+      - name: "michele"
+        label: "Profilo — Michele Argalia"
+        file: "content/site/michele.json"
+        fields:
+          - { label: "Ruolo", name: "role", widget: "string" }
+          - { label: "Presentazione breve (card in home, puoi inserire link)", name: "cardBio", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Citazione (pagina profilo)", name: "quote", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Formazione (una voce per riga)", name: "formazione", widget: "list" }
+          - { label: "Aree di interesse clinico (puoi inserire link)", name: "areeInteresse", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Percorso professionale (una voce per riga)", name: "percorso", widget: "list" }
+          - { label: "Attività Isipsé (puoi inserire link)", name: "isipse", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Telefono", name: "phone", widget: "string" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "Numero Albo", name: "albo", widget: "string" }
+          - { label: "Curriculum (PDF o Word)", name: "cvFile", widget: "file", required: false }
+          - { label: "Elenco pubblicazioni (PDF o Word)", name: "pubblicazioniFile", widget: "file", required: false }
+      - name: "cecilia"
+        label: "Profilo — Cecilia Belardelli"
+        file: "content/site/cecilia.json"
+        fields:
+          - { label: "Ruolo", name: "role", widget: "string" }
+          - { label: "Presentazione breve (card in home, puoi inserire link)", name: "cardBio", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Citazione (pagina profilo)", name: "quote", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Formazione (una voce per riga)", name: "formazione", widget: "list" }
+          - { label: "Aree di interesse clinico (puoi inserire link)", name: "areeInteresse", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Percorso professionale (una voce per riga)", name: "percorso", widget: "list" }
+          - { label: "Telefono", name: "phone", widget: "string" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "Numero Albo", name: "albo", widget: "string" }
+          - { label: "Curriculum (PDF o Word)", name: "cvFile", widget: "file", required: false }
+          - { label: "Elenco pubblicazioni (PDF o Word)", name: "pubblicazioniFile", widget: "file", required: false }
+
+  - name: "servizi"
+    label: "Pagine servizi"
+    files:
+      - name: "psicoterapia-individuale"
+        label: "Psicoterapia Individuale"
+        file: "content/site/servizio-psicoterapia-individuale.json"
+        fields:
+          - { label: "Titolo", name: "title", widget: "string" }
+          - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Testo della pagina", name: "body", widget: "markdown" }
+          - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+      - name: "sostegno-genitorialita"
+        label: "Sostegno alla genitorialità"
+        file: "content/site/servizio-sostegno-genitorialita.json"
+        fields:
+          - { label: "Titolo", name: "title", widget: "string" }
+          - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Testo della pagina", name: "body", widget: "markdown" }
+          - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+      - name: "valutazione-psicologica"
+        label: "Valutazione Psicologica"
+        file: "content/site/servizio-valutazione-psicologica.json"
+        fields:
+          - { label: "Titolo", name: "title", widget: "string" }
+          - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Testo della pagina", name: "body", widget: "markdown" }
+          - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+      - name: "psicoterapia-sociale"
+        label: "Psicoterapia Sociale — Spazio a Tutti"
+        file: "content/site/servizio-psicoterapia-sociale.json"
+        fields:
+          - { label: "Titolo", name: "title", widget: "string" }
+          - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Testo della pagina", name: "body", widget: "markdown" }
+          - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+
+  - name: "articoli"
+    label: "Articoli"
+    label_singular: "Articolo"
+    folder: "content/articoli"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: "json"
+    format: "json"
+    fields:
+      - { label: "Titolo", name: "title", widget: "string" }
+      - { label: "Data", name: "date", widget: "datetime", format: "YYYY-MM-DD", picker_utc: true }
+      - { label: "Estratto (2-3 righe, appare nell'elenco)", name: "excerpt", widget: "text" }
+      - { label: "Contenuto", name: "body", widget: "markdown" }
+      - { label: "Immagine di copertina", name: "image", widget: "image", required: false }
+      - { label: "Pubblicato", name: "published", widget: "boolean", default: false, hint: "Un amministratore o editor deve attivarlo perché l'articolo vada online — è il passaggio di revisione" }
+
+  - name: "documenti"
+    label: "Documenti"
+    label_singular: "Documento"
+    folder: "content/documenti"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
+    fields:
+      - { label: "Titolo (es. Modulo di consenso informato)", name: "title", widget: "string" }
+      - { label: "Descrizione breve", name: "description", widget: "text", required: false }
+      - { label: "File (PDF o Word)", name: "file", widget: "file" }
+
+  - name: "dizionario"
+    label: "Dizionario Psy"
+    label_singular: "Voce del dizionario"
+    folder: "content/dizionario"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
+    fields:
+      - { label: "Titolo", name: "title", widget: "string" }
+      - { label: "Meta-descrizione (per Google, 1-2 frasi)", name: "metaDescription", widget: "text" }
+      - { label: "Testo", name: "body", widget: "markdown" }
+
+  - name: "pagine-libere"
+    label: "Pagine libere"
+    label_singular: "Pagina"
+    folder: "content/pagine-libere"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
+    fields:
+      - { label: "Titolo", name: "title", widget: "string" }
+      - { label: "Pagina 'genitore' (facoltativo, es. Servizi — appare come percorso in cima alla pagina)", name: "parentLabel", widget: "string", required: false }
+      - { label: "Collegamento della pagina genitore (facoltativo)", name: "parentLink", widget: "string", required: false }
+      - { label: "Testo della pagina", name: "body", widget: "markdown" }
+      - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+      - { label: "Pubblicata", name: "published", widget: "boolean", default: true, hint: "Disattiva per salvare una bozza senza pubblicarla sul sito" }

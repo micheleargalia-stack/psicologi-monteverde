@@ -1,0 +1,25 @@
+# Redirect dal vecchio sito Wix (psicologimonteverde.com) al sito nuovo.
+# Attivo quando il dominio verrà spostato qui. Formato: vecchio-indirizzo  nuovo-indirizzo  301
+
+/chi-siamo                                                                          /index.html#chi-siamo   301
+/michele-argalia-psicologo                                                          /michele-argalia.html   301
+/dottoressa-cecilia-belardelli                                                      /cecilia-belardelli.html   301
+/nostri-servizi                                                                     /index.html#servizi   301
+/psicoterapia-individuale                                                           /servizio.html?s=psicoterapia-individuale   301
+/sostegno-genitorialita-touchpoints                                                 /servizio.html?s=sostegno-genitorialita   301
+/valutazionepsicologica                                                             /servizio.html?s=valutazione-psicologica   301
+/servizio-di-psicoterapia-sociale                                                   /servizio.html?s=psicoterapia-sociale   301
+/contatti                                                                           /index.html#contatti   301
+/dove-siamo                                                                         /index.html#contatti   301
+/i-nostri-articoli                                                                  /articoli.html   301
+/copia-di-dizionario-psy                                                            /dizionario.html   301
+/agorafobia                                                                         /dizionario-voce.html?slug=agorafobia   301
+/ansia-attacco-di-panico                                                            /dizionario-voce.html?slug=ansia-attacco-di-panico   301
+/ipocondria                                                                         /dizionario-voce.html?slug=ipocondria   301
+/stress                                                                             /dizionario-voce.html?slug=stress   301
+/consenso-informato                                                                 /index.html#contatti   301
+
+# Vecchi articoli del blog (restano bozze finché non li rivedi e pubblichi dal pannello)
+/single-post/2016/02/19/stepchild-adoption                                          /articolo.html?slug=2016-02-21-stepchild-adoption   301
+/single-post/2016/02/16/indagine-sull-influenza-reciproca-tra-i-sintomi-di-adhd-nei-bambini-e-le-relazioni-tra-i   /articolo.html?slug=2016-02-16-adhd-relazioni-pari   301
+/single-post/2015/03/19/benvenuti-nello-spazio-clinico-monteverde                   /articolo.html?slug=2015-03-19-benvenuti-spazio-clinico   301

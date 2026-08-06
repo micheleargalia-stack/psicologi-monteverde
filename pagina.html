@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title id="page-title">Psicologi Monteverde</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .article-body{max-width:70ch;}
+  .article-body p{color:var(--ink-soft);margin:0 0 16px;}
+  .article-body ul,.article-body ol{color:var(--ink-soft);padding-left:20px;}
+  .breadcrumb{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-soft);margin-bottom:14px;}
+  .breadcrumb a{color:var(--sage-deep);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="brand-link" href="index.html">
+      <div class="brand">
+        <span class="brand-name">Psicologi Monteverde</span>
+        <span class="brand-sub">Psicologia e Psicoterapia · Roma</span>
+      </div>
+    </a>
+    <nav class="links"></nav>
+    <button class="menu-toggle" aria-label="Menu">☰ MENU</button>
+  </div>
+</header>
+
+<section class="profile-hero">
+  <div class="wrap">
+    <a class="back-link" href="index.html">← Torna alla home</a>
+    <div id="breadcrumb" class="breadcrumb" style="display:none;"></div>
+    <h1 id="p-title">Caricamento…</h1>
+  </div>
+</section>
+
+<section class="bio-section">
+  <div class="wrap">
+    <div id="p-body" class="article-body"></div>
+    <p style="margin-top:24px;">Per maggiori informazioni o per richiedere una consulenza, <a class="more-link" href="index.html#contatti">contattaci</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <span class="brand-name" style="font-family:'Fraunces',serif;font-size:19px;">Psicologi Monteverde</span>
+      <p id="footer-tagline" style="max-width:32ch;color:#9BA290;font-size:14px;margin-top:10px;">Centro di Psicologia e Psicoterapia per l'infanzia, l'adolescenza, l'eta adulta e la famiglia.</p>
+    </div>
+    <div class="links-col">
+      <span class="label" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E7563;">Link utili</span>
+      <div id="footer-links">
+        <a href="http://www.psicologopigneto.it" target="_blank" rel="noopener">Psicologi Pigneto</a>
+        <a href="http://www.meetnos.it" target="_blank" rel="noopener">Meetnos APS</a>
+        <a href="http://www.ordinepsicologilazio.it" target="_blank" rel="noopener">Ordine degli Psicologi del Lazio</a>
+      </div>
+    </div>
+    <div class="links-col">
+      <span class="label" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6E7563;">Social</span>
+      <div id="footer-social">
+        <a href="https://www.facebook.com/psicologimonteverde/" target="_blank" rel="noopener">Facebook</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Psicologi Monteverde</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  const toggle = document.querySelector('.menu-toggle');
+  const links = document.querySelector('nav.links');
+  toggle.addEventListener('click', () => {
+    const open = links.style.display === 'flex';
+    links.style.display = open ? 'none' : 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '68px';
+    links.style.right = '28px';
+    links.style.background = '#F5F2EA';
+    links.style.border = '1px solid #C9C2AC';
+    links.style.padding = '16px 22px';
+    links.style.gap = '14px';
+  });
+
+  const GITHUB_USER = "micheleargalia-stack";
+  const GITHUB_REPO = "psicologi-monteverde";
+  const GITHUB_BRANCH = "main";
+
+  function darken(hex, amt) {
+    const num = parseInt(hex.replace('#', ''), 16);
+    let r = (num >> 16) - amt, g = ((num >> 8) & 0xff) - amt, b = (num & 0xff) - amt;
+    r = Math.max(0, Math.min(255, r)); g = Math.max(0, Math.min(255, g)); b = Math.max(0, Math.min(255, b));
+    return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+  }
+  function applyTheme(theme) {
+    if (!theme) return;
+    let css = '';
+    if (theme.primary) css += `:root{--sage:${theme.primary};--sage-deep:${darken(theme.primary, 40)};}`;
+    if (theme.accent) css += `:root{--cotto:${theme.accent};}`;
+    if (theme.headingFont && theme.headingFont !== 'Fraunces') {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = `https://fonts.googleapis.com/css2?family=${theme.headingFont.replace(/ /g, '+')}:ital,wght@0,500;0,600;1,500;1,600&display=swap`;
+      document.head.appendChild(link);
+      css += `:root{--heading-font:'${theme.headingFont}',serif;}`;
+    }
+    if (css) {
+      const style = document.createElement('style');
+      style.textContent = css;
+      document.head.appendChild(style);
+    }
+  }
+
+  async function loadRaw(path) {
+    const url = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}?t=${Date.now()}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('non disponibile');
+    return res.json();
+  }
+
+  // Menu dinamico
+  loadRaw('content/site/home.json').then(home => {
+    if (home.menuItems && home.menuItems.length) {
+      links.innerHTML = home.menuItems.map(m => `<a href="${m.link}">${m.label}</a>`).join('');
+    }
+    if (home.footerTagline) { const ft = document.getElementById('footer-tagline'); if (ft) ft.textContent = home.footerTagline; }
+    if (home.footerLinks && home.footerLinks.length) { const fl = document.getElementById('footer-links'); if (fl) fl.innerHTML = home.footerLinks.map(m => `<a href="${m.link}" target="_blank" rel="noopener">${m.label}</a>`).join(''); }
+    if (home.footerSocial && home.footerSocial.length) { const fs = document.getElementById('footer-social'); if (fs) fs.innerHTML = home.footerSocial.map(m => `<a href="${m.link}" target="_blank" rel="noopener">${m.label}</a>`).join(''); }
+    applyTheme(home.theme);
+  }).catch(() => {});
+
+  // Contenuto della pagina
+  async function loadPage() {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('slug');
+    if (!slug) return;
+    try {
+      const data = await loadRaw(`content/pagine-libere/${slug}.json`);
+      if (data.published === false) throw new Error('non pubblicata');
+
+      document.getElementById('page-title').textContent = data.title + ' | Psicologi Monteverde';
+      document.getElementById('p-title').textContent = data.title;
+      if (data.metaDescription) {
+        const md = document.querySelector('meta[name="description"]') || (() => { const m = document.createElement('meta'); m.name = 'description'; document.head.appendChild(m); return m; })();
+        md.setAttribute('content', data.metaDescription);
+      }
+      document.getElementById('p-body').innerHTML = marked.parse(data.body || '');
+
+      if (data.parentLabel) {
+        const bc = document.getElementById('breadcrumb');
+        bc.style.display = 'block';
+        const parentHtml = data.parentLink ? `<a href="${data.parentLink}">${data.parentLabel}</a>` : data.parentLabel;
+        bc.innerHTML = `${parentHtml} → ${data.title}`;
+      }
+    } catch (e) {
+      document.getElementById('p-title').textContent = 'Pagina non trovata';
+    }
+  }
+  loadPage();
+</script>
+
+</body>
+</html>
