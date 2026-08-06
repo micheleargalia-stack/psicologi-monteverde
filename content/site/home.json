@@ -1,50 +1,94 @@
 {
-  "heroEyebrow": "Studio di Psicologia e Psicoterapia — Monteverde, Roma",
-  "heroTitle": "La cura comincia in una relazione, *non in una diagnosi.*",
-  "heroSubtitle": "Un centro di psicoterapia a orientamento psicoanalitico relazionale per l'infanzia, l'adolescenza, l'età adulta e la famiglia. Ascolto, presenza, pensiero condiviso.",
-  "introQuote": "Da anni accompagniamo persone, coppie e famiglie nei momenti di difficoltà e nei passaggi della vita, dall'infanzia alla terza età. Crediamo che la mente si formi e si trasformi nella relazione con l'altro — e che la stanza di terapia sia il luogo in cui questo può accadere di nuovo, in un modo diverso.",
-  "teamEyebrow": "Il team",
-  "teamTitle": "Due professionisti, un solo modo di ascoltare",
-  "servicesEyebrow": "Servizi",
-  "servicesTitle": "Come possiamo aiutarti",
-  "contactEyebrow": "Contatti",
-  "contactTitle": "Vieni a trovarci a Monteverde",
   "menuItems": [
-    { "label": "Chi siamo", "link": "index.html#chi-siamo" },
-    { "label": "Servizi", "link": "index.html#servizi" },
-    { "label": "Dizionario Psy", "link": "dizionario.html" },
-    { "label": "Contatti", "link": "index.html#contatti" }
+    {
+      "label": "Chi siamo",
+      "link": "index.html#chi-siamo"
+    },
+    {
+      "label": "Servizi",
+      "link": "index.html#servizi"
+    },
+    {
+      "label": "Dizionario Psy",
+      "link": "dizionario.html"
+    },
+    {
+      "label": "Contatti",
+      "link": "index.html#contatti"
+    }
   ],
-  "footerTagline": "Centro di Psicologia e Psicoterapia per l'infanzia, l'adolescenza, l'età adulta e la famiglia.",
-  "footerLinks": [
-    { "label": "Psicologi Pigneto", "link": "http://www.psicologopigneto.it" },
-    { "label": "Meetnos APS", "link": "http://www.meetnos.it" },
-    { "label": "Ordine degli Psicologi del Lazio", "link": "http://www.ordinepsicologilazio.it" }
-  ],
-  "footerSocial": [
-    { "label": "Facebook", "link": "https://www.facebook.com/psicologimonteverde/" }
-  ],
-  "metaDescription": "Centro di Psicologia e Psicoterapia a Monteverde, Roma. Psicoterapia individuale, sostegno alla genitorialità, valutazione psicologica.",
+  "whatsappLabel": "",
   "ogImage": "",
+  "footerSocial": [
+    {
+      "label": "Facebook",
+      "link": "https://www.facebook.com/psicologimonteverde/"
+    }
+  ],
   "theme": {
     "primary": "#5F7052",
     "accent": "#A1553A",
     "headingFont": "Fraunces"
   },
-  "faq": [
-    { "question": "Come funziona il primo colloquio?", "answer": "Il primo incontro serve a conoscersi e a capire insieme quale percorso può essere più utile. Non richiede nulla di particolare da preparare — puoi contattarci per telefono, WhatsApp o tramite il modulo del sito per fissare un appuntamento." },
-    { "question": "Le sedute sono anche online?", "answer": "In alcuni casi sì, valutiamo insieme la modalità più adatta durante il primo colloquio." },
-    { "question": "Serve l'invio di un medico?", "answer": "No, non è necessaria alcuna richiesta medica per iniziare un percorso psicologico o psicoterapeutico." },
-    { "question": "Quali sono i costi?", "answer": "Le tariffe variano in base al tipo di percorso; ne parliamo direttamente al primo contatto. È inoltre attivo un servizio a costi sociali per chi ne ha diritto." }
-  ],
-  "services": [
-    { "title": "Psicoterapia individuale", "description": "Percorsi per adulti, adolescenti e bambini su ansia, depressione, stress, disturbi di personalità e problematiche relazionali. In presenza o online.", "slug": "psicoterapia-individuale" },
-    { "title": "Sostegno alla genitorialità", "description": "Accompagnamento alla nascita, gruppi di sostegno e interventi domiciliari per la relazione genitore-bambino, anche nei percorsi di adozione.", "slug": "sostegno-genitorialita" },
-    { "title": "Valutazione psicologica", "description": "Colloqui di valutazione per disturbi specifici dell'apprendimento, difficoltà scolastiche, criticità dello sviluppo, orientamento scolastico e lavorativo.", "slug": "valutazione-psicologica" }
-  ],
-  "contactAddress": "Viale dei Quattro Venti 156, Roma",
+  "contactEyebrow": "Contatti",
+  "servicesEyebrow": "Servizi",
+  "teamEyebrow": "Il team",
   "contactPhone": "348 710 9731",
-  "whatsappLabel": "",
+  "heroEyebrow": "Studio di Psicologia e Psicoterapia — Monteverde, Roma",
+  "contactHours": "Lunedì: 8:00 – 20:00\nMartedì: 8:00 – 20:00\nMercoledì: 8:00 – 20:00\nGiovedì: 8:00 – 20:00\nVenerdì: 8:00 – 20:00",
+  "introQuote": "Da anni accompagniamo i nostri pazienti nell'affrontare i momenti difficili e i passaggi della vita. Crediamo che la mente si formi e si trasformi nella relazione con l'altro e che la stanza di terapia sia il luogo in cui questo può accadere di nuovo, in un modo diverso.",
+  "heroSubtitle": "Centro di psicoterapia a orientamento psicoanalitico relazionale per l'adolescenza, l'età adulta e la famiglia.",
+  "footerTagline": "Centro di Psicologia e Psicoterapia per l'adolescenza, l'età adulta e la famiglia.",
+  "contactAddress": "Viale dei Quattro Venti 156, Roma",
+  "faq": [
+    {
+      "question": "Come funziona il primo colloquio?",
+      "answer": "Il primo incontro serve a conoscersi e a capire insieme quale percorso può essere più utile. Non richiede nulla di particolare da preparare — puoi contattarci per telefono, WhatsApp o tramite il modulo del sito per fissare un appuntamento."
+    },
+    {
+      "question": "Le sedute sono anche online?",
+      "answer": "In alcuni casi sì, valutiamo insieme la modalità più adatta durante il primo colloquio."
+    },
+    {
+      "question": "Serve l'invio di un medico?",
+      "answer": "No, non è necessaria alcuna richiesta medica per iniziare un percorso psicologico o psicoterapeutico."
+    },
+    {
+      "question": "Quali sono i costi?",
+      "answer": "Le tariffe variano in base al tipo di percorso; ne parliamo direttamente al primo contatto. È inoltre attivo un servizio a costi sociali per chi ne ha diritto."
+    }
+  ],
+  "metaDescription": "Centro di Psicologia e Psicoterapia a Monteverde, Roma. Psicoterapia individuale, sostegno alla genitorialità, valutazione psicologica.",
+  "contactTitle": "Vieni a trovarci a Monteverde",
+  "servicesTitle": "Come possiamo aiutarti",
+  "teamTitle": "Chi siamo",
   "contactEmail": "psicologimonteverde@gmail.com",
-  "contactHours": "Lunedì: 8:00 – 21:00\nMartedì: 8:00 – 21:00\nMercoledì: 8:00 – 21:00\nGiovedì: 8:00 – 21:00\nVenerdì: 8:00 – 21:00"
+  "services": [
+    {
+      "title": "Psicoterapia individuale",
+      "description": "Percorsi per adulti, adolescenti e bambini su ansia, depressione, stress, disturbi di personalità e problematiche relazionali. In presenza o online.",
+      "slug": "psicoterapia-individuale"
+    },
+    {
+      "title": "Sostegno alla genitorialità",
+      "description": "Accompagnamento alla nascita, gruppi di sostegno e interventi domiciliari per la relazione genitore-bambino, anche nei percorsi di adozione.",
+      "slug": "sostegno-genitorialita"
+    },
+    {
+      "title": "Valutazione psicologica",
+      "description": "Colloqui di valutazione per disturbi specifici dell'apprendimento, difficoltà scolastiche, criticità dello sviluppo, orientamento scolastico e lavorativo.",
+      "slug": "valutazione-psicologica"
+    }
+  ],
+  "heroTitle": "La cura comincia con un incontro e la costruzione di una relazione",
+  "footerLinks": [
+    {
+      "label": "Meetnos APS",
+      "link": "http://www.meetnos.it"
+    },
+    {
+      "label": "Ordine degli Psicologi del Lazio",
+      "link": "http://www.ordinepsicologilazio.it"
+    }
+  ]
 }
