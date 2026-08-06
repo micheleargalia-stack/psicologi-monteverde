@@ -133,10 +133,11 @@
       const jsonFiles = Array.isArray(files) ? files.filter(f => f.name.endsWith('.json')) : [];
       if (jsonFiles.length === 0) throw new Error('nessun documento ancora');
 
-      const docs = await Promise.all(jsonFiles.map(async f => {
+      const docs = (await Promise.all(jsonFiles.map(async f => {
         const r = await fetch(f.download_url);
         return r.json();
-      }));
+      }))).filter(d => !d.hideFromSearch);
+      if (docs.length === 0) throw new Error('nessun documento visibile');
 
       emptyEl.style.display = 'none';
       listEl.style.display = 'grid';

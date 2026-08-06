@@ -157,7 +157,7 @@
       }));
 
       const published = articles
-        .filter(a => a.published !== false)
+        .filter(a => a.published !== false && !a.hideFromSearch)
         .sort((a, b) => new Date(b.date) - new Date(a.date));
 
       if (published.length === 0) throw new Error('nessun articolo pubblicato');

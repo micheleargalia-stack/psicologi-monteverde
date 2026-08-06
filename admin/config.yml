@@ -52,6 +52,7 @@ collections:
               - { label: "Collegamento a pagina dedicata (lascia vuoto se non ne ha una)", name: "slug", widget: "string", required: false, hint: "Es. psicoterapia-individuale — deve corrispondere a un file in Pagine servizi" }
           - { label: "Indirizzo", name: "contactAddress", widget: "string" }
           - { label: "Telefono", name: "contactPhone", widget: "string" }
+          - { label: "Testo alternativo per i pulsanti WhatsApp (lascia vuoto per mostrare il numero)", name: "whatsappLabel", widget: "string", required: false, hint: "Es. \"Scrivici su WhatsApp\" invece del numero in bella vista" }
           - { label: "Email", name: "contactEmail", widget: "string" }
           - { label: "Orari (una riga per giorno, formato \"Giorno: orario\")", name: "contactHours", widget: "text" }
           - { label: "Descrizione per Google (SEO, 1-2 frasi)", name: "metaDescription", widget: "text", required: false }
@@ -78,6 +79,7 @@ collections:
         file: "content/site/michele.json"
         fields:
           - { label: "Ruolo", name: "role", widget: "string" }
+          - { label: "Foto (formato verticale, va bene anche uno smartphone)", name: "photo", widget: "image", required: false }
           - { label: "Presentazione breve (card in home, puoi inserire link)", name: "cardBio", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Citazione (pagina profilo)", name: "quote", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Formazione (una voce per riga)", name: "formazione", widget: "list" }
@@ -94,6 +96,7 @@ collections:
         file: "content/site/cecilia.json"
         fields:
           - { label: "Ruolo", name: "role", widget: "string" }
+          - { label: "Foto (formato verticale, va bene anche uno smartphone)", name: "photo", widget: "image", required: false }
           - { label: "Presentazione breve (card in home, puoi inserire link)", name: "cardBio", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Citazione (pagina profilo)", name: "quote", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Formazione (una voce per riga)", name: "formazione", widget: "list" }
@@ -116,6 +119,7 @@ collections:
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Testo della pagina", name: "body", widget: "markdown" }
           - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+          - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
       - name: "sostegno-genitorialita"
         label: "Sostegno alla genitorialità"
         file: "content/site/servizio-sostegno-genitorialita.json"
@@ -124,6 +128,7 @@ collections:
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Testo della pagina", name: "body", widget: "markdown" }
           - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+          - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
       - name: "valutazione-psicologica"
         label: "Valutazione Psicologica"
         file: "content/site/servizio-valutazione-psicologica.json"
@@ -132,6 +137,7 @@ collections:
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Testo della pagina", name: "body", widget: "markdown" }
           - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+          - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
       - name: "psicoterapia-sociale"
         label: "Psicoterapia Sociale — Spazio a Tutti"
         file: "content/site/servizio-psicoterapia-sociale.json"
@@ -140,6 +146,7 @@ collections:
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Testo della pagina", name: "body", widget: "markdown" }
           - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+          - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
 
   - name: "articoli"
     label: "Articoli"
@@ -155,6 +162,7 @@ collections:
       - { label: "Estratto (2-3 righe, appare nell'elenco)", name: "excerpt", widget: "text" }
       - { label: "Contenuto", name: "body", widget: "markdown" }
       - { label: "Immagine di copertina", name: "image", widget: "image", required: false }
+      - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "L'articolo resta visibile sul sito ma escluso da Google" }
       - { label: "Pubblicato", name: "published", widget: "boolean", default: false, hint: "Un amministratore o editor deve attivarlo perché l'articolo vada online — è il passaggio di revisione" }
 
   - name: "documenti"
@@ -169,6 +177,7 @@ collections:
       - { label: "Titolo (es. Modulo di consenso informato)", name: "title", widget: "string" }
       - { label: "Descrizione breve", name: "description", widget: "text", required: false }
       - { label: "File (PDF o Word)", name: "file", widget: "file" }
+      - { label: "Nascondi (dalla pagina Documenti e da Google)", name: "hideFromSearch", widget: "boolean", default: false }
 
   - name: "dizionario"
     label: "Dizionario Psy"
@@ -182,6 +191,7 @@ collections:
       - { label: "Titolo", name: "title", widget: "string" }
       - { label: "Meta-descrizione (per Google, 1-2 frasi)", name: "metaDescription", widget: "text" }
       - { label: "Testo", name: "body", widget: "markdown" }
+      - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
 
   - name: "pagine-libere"
     label: "Pagine libere"
@@ -197,4 +207,5 @@ collections:
       - { label: "Collegamento della pagina genitore (facoltativo)", name: "parentLink", widget: "string", required: false }
       - { label: "Testo della pagina", name: "body", widget: "markdown" }
       - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
+      - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
       - { label: "Pubblicata", name: "published", widget: "boolean", default: true, hint: "Disattiva per salvare una bozza senza pubblicarla sul sito" }

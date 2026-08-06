@@ -39,7 +39,8 @@
   <div class="wrap">
     <a class="back-link" href="index.html#chi-siamo">← Torna a Chi siamo</a>
     <div class="top">
-      <div class="avatar-mono">CB</div>
+      <div class="avatar-mono" id="avatar-fallback">CB</div>
+      <img id="avatar-photo" class="avatar-photo" style="display:none;" alt="Dott.ssa Cecilia Belardelli">
       <div>
         <h1>Dott.ssa Cecilia Belardelli</h1>
         <span class="role" id="role">Psicologa</span>
@@ -168,6 +169,11 @@
       const d = await res.json();
 
       document.getElementById('role').textContent = d.role;
+      if (d.photo) {
+        document.getElementById('avatar-photo').src = d.photo;
+        document.getElementById('avatar-photo').style.display = 'block';
+        document.getElementById('avatar-fallback').style.display = 'none';
+      }
       document.getElementById('phone').textContent = d.phone;
       document.getElementById('email').textContent = d.email;
       document.getElementById('email').href = 'mailto:' + d.email;

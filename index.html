@@ -10,6 +10,26 @@
 <meta property="og:site_name" content="Psicologi Monteverde">
 <meta property="og:title" content="Psicologi Monteverde — Studio di Psicologia e Psicoterapia a Roma">
 <meta property="og:description" content="Centro di Psicologia e Psicoterapia a Monteverde, Roma. Psicoterapia individuale, sostegno alla genitorialità, valutazione psicologica.">
+<script type="application/ld+json" id="ld-json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalBusiness",
+  "name": "Psicologi Monteverde",
+  "description": "Centro di Psicologia e Psicoterapia a Monteverde, Roma.",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Viale dei Quattro Venti 156",
+    "addressLocality": "Roma",
+    "addressRegion": "RM",
+    "addressCountry": "IT"
+  },
+  "telephone": "+393487109731",
+  "email": "psicologimonteverde@gmail.com",
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "08:00", "closes": "21:00" }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -71,6 +91,7 @@
     </div>
     <div class="team">
       <div class="person">
+        <img id="michele-photo" class="person-photo" style="display:none;" alt="Dott. Michele Argalia">
         <h3>Dott. Michele Argalia</h3>
         <span class="role" id="michele-role">Psicologo · Psicoterapeuta</span>
         <p id="michele-card-bio">Iscritto all'Albo degli Psicologi del Lazio (n. 19760). Laureato in Psicologia dell'età evolutiva alla Sapienza di Roma, si occupa di ansia, depressione, stress, sostegno alla genitorialità e problematiche familiari. Formato in Psicologia Psicoanalitica del Sé e Psicoanalisi Relazionale presso l'Isipsé di Roma, di cui è socio; socio IARPP dal 2016. Fondatore di Psicologi Monteverde, collabora con Psicologi Pigneto.</p>
@@ -81,6 +102,7 @@
         <a class="more-link" href="michele-argalia.html">Leggi il profilo completo →</a>
       </div>
       <div class="person">
+        <img id="cecilia-photo" class="person-photo" style="display:none;" alt="Dott.ssa Cecilia Belardelli">
         <h3>Dott.ssa Cecilia Belardelli</h3>
         <span class="role" id="cecilia-role">Psicologa</span>
         <p id="cecilia-card-bio">Iscritta all'Ordine degli Psicologi del Lazio (n. 19069). Laureata in Psicologia dinamica e clinica alla Sapienza di Roma, ha approfondito il trattamento dei disturbi del comportamento alimentare e il sostegno alla genitorialità, anche attraverso la formazione al metodo VIPP-SD dell'Università di Leiden. Formata presso l'Isipsé di Roma. Collabora con Psicologi Pigneto.</p>
@@ -186,6 +208,10 @@
         <label for="cf-message">Messaggio</label>
         <textarea id="cf-message" name="message" required></textarea>
       </div>
+      <div style="position:absolute;left:-9999px;" aria-hidden="true">
+        <label for="cf-website">Lascia questo campo vuoto</label>
+        <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off">
+      </div>
       <button type="submit" class="btn btn-primary form-submit">Invia messaggio →</button>
       <div id="form-status" class="form-status"></div>
     </form>
@@ -230,6 +256,15 @@
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+
+      // Anti-spam: se questo campo invisibile è compilato, è un robot — finge successo e non invia nulla
+      if (document.getElementById('cf-website').value) {
+        status.className = 'form-status ok';
+        status.textContent = 'Messaggio inviato, grazie — ti risponderemo presto.';
+        form.reset();
+        return;
+      }
+
       btn.disabled = true;
       btn.textContent = 'Invio in corso…';
       status.className = 'form-status';
@@ -323,6 +358,14 @@
         const md = document.querySelector('meta[name="description"]');
         if (md) md.setAttribute('content', home.metaDescription);
       }
+      try {
+        const ld = JSON.parse(document.getElementById('ld-json').textContent);
+        ld.address.streetAddress = home.contactAddress;
+        ld.telephone = phoneDigits(home.contactPhone);
+        ld.email = home.contactEmail;
+        if (home.metaDescription) ld.description = home.metaDescription;
+        document.getElementById('ld-json').textContent = JSON.stringify(ld);
+      } catch (e) {}
       if (home.footerTagline) {
         const ft = document.getElementById('footer-tagline');
         if (ft) ft.textContent = home.footerTagline;
@@ -359,14 +402,14 @@
       document.getElementById('contact-address').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(home.contactAddress)}`;
       const mapEl = document.getElementById('map-embed');
       if (mapEl) mapEl.src = `https://www.google.com/maps?q=${encodeURIComponent(home.contactAddress)}&output=embed`;
-      document.getElementById('contact-phone-value').innerHTML = `<a href="tel:${phoneDigits(home.contactPhone)}">${home.contactPhone}</a>`;
+      document.getElementById('contact-phone-value').innerHTML = `<a href="tel:${phoneDigits(home.contactPhone)}">${home.whatsappLabel || home.contactPhone}</a>`;
       document.getElementById('contact-email-value').innerHTML = `<a href="mailto:${home.contactEmail}">${home.contactEmail}</a>`;
 
       const waLink = `https://wa.me/${phoneDigits(home.contactPhone).replace('+', '')}`;
       document.getElementById('whatsapp-btn').href = waLink;
       document.getElementById('hero-whatsapp-btn').href = waLink;
       document.getElementById('hero-phone-btn').href = `tel:${phoneDigits(home.contactPhone)}`;
-      document.getElementById('hero-phone-btn').textContent = home.contactPhone;
+      document.getElementById('hero-phone-btn').textContent = home.whatsappLabel || home.contactPhone;
 
       document.getElementById('hours-body').innerHTML = home.contactHours.split('\n').filter(Boolean).map(line => {
         const [day, ...rest] = line.split(':');
@@ -380,6 +423,10 @@
       document.getElementById('michele-card-bio').innerHTML = marked.parseInline(michele.cardBio);
       document.getElementById('michele-card-phone').textContent = michele.phone;
       document.getElementById('michele-card-email').textContent = michele.email;
+      if (michele.photo) {
+        const img = document.getElementById('michele-photo');
+        img.src = michele.photo; img.style.display = 'block';
+      }
     } catch (e) { /* resta il testo attuale già presente nella pagina */ }
 
     try {
@@ -388,6 +435,10 @@
       document.getElementById('cecilia-card-bio').innerHTML = marked.parseInline(cecilia.cardBio);
       document.getElementById('cecilia-card-phone').textContent = cecilia.phone;
       document.getElementById('cecilia-card-email').textContent = cecilia.email;
+      if (cecilia.photo) {
+        const img = document.getElementById('cecilia-photo');
+        img.src = cecilia.photo; img.style.display = 'block';
+      }
     } catch (e) { /* resta il testo attuale già presente nella pagina */ }
   })();
 </script>

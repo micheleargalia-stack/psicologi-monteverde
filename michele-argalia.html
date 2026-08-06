@@ -39,7 +39,8 @@
   <div class="wrap">
     <a class="back-link" href="index.html#chi-siamo">← Torna a Chi siamo</a>
     <div class="top">
-      <div class="avatar-mono">MA</div>
+      <div class="avatar-mono" id="avatar-fallback">MA</div>
+      <img id="avatar-photo" class="avatar-photo" style="display:none;" alt="Dott. Michele Argalia">
       <div>
         <h1>Dott. Michele Argalia</h1>
         <span class="role" id="role">Psicologo · Psicoterapeuta</span>
@@ -180,6 +181,11 @@
       const d = await res.json();
 
       document.getElementById('role').textContent = d.role;
+      if (d.photo) {
+        document.getElementById('avatar-photo').src = d.photo;
+        document.getElementById('avatar-photo').style.display = 'block';
+        document.getElementById('avatar-fallback').style.display = 'none';
+      }
       document.getElementById('phone').textContent = d.phone;
       document.getElementById('email').textContent = d.email;
       document.getElementById('email').href = 'mailto:' + d.email;

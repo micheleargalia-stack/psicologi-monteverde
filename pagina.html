@@ -152,6 +152,12 @@
         const md = document.querySelector('meta[name="description"]') || (() => { const m = document.createElement('meta'); m.name = 'description'; document.head.appendChild(m); return m; })();
         md.setAttribute('content', data.metaDescription);
       }
+      if (data.hideFromSearch) {
+        const rm = document.createElement('meta');
+        rm.name = 'robots'; rm.content = 'noindex';
+        document.head.appendChild(rm);
+      }
+
       document.getElementById('p-body').innerHTML = marked.parse(data.body || '');
 
       if (data.parentLabel) {

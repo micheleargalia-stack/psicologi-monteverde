@@ -152,6 +152,11 @@
       document.getElementById('article-title').textContent = data.title;
       document.getElementById('article-date').textContent = new Date(data.date).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
       document.getElementById('article-body').innerHTML = marked.parse(data.body || '');
+      if (data.hideFromSearch) {
+        const rm = document.createElement('meta');
+        rm.name = 'robots'; rm.content = 'noindex';
+        document.head.appendChild(rm);
+      }
     } catch (e) {
       document.getElementById('article-title').textContent = 'Articolo non trovato';
       document.getElementById('article-body').innerHTML = '<p>Questo articolo non è disponibile.</p>';

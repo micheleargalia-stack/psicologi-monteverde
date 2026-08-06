@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Mappa del sito — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--stone:#E8E3D8;--paper:#F5F2EA;--ink:#202B23;--ink-soft:#5B6459;--sage:#5F7052;--sage-deep:#43512F;--cotto:#A1553A;--line:#C9C2AC;}
+  *{box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif;background:var(--stone);color:var(--ink);margin:0;padding:32px 20px 80px;}
+  h1{font-family:'Fraunces',serif;font-size:26px;margin:0 0 6px;}
+  .sub{color:var(--ink-soft);font-size:14px;margin-bottom:28px;}
+  .back{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--sage-deep);text-decoration:none;display:inline-block;margin-bottom:20px;}
+  section.group{background:var(--paper);border:1px solid var(--line);margin-bottom:18px;border-radius:4px;overflow:hidden;}
+  section.group > h2{font-family:'Fraunces',serif;font-size:17px;margin:0;padding:14px 18px;background:var(--stone);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+  .in-menu{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:10px;background:var(--sage);color:var(--paper);}
+  .not-in-menu{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:10px;background:var(--line);color:var(--ink-soft);}
+  ul{list-style:none;margin:0;padding:0;}
+  li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  li:last-child{border-bottom:none;}
+  .item-name{font-size:14.5px;}
+  .item-parent{color:var(--ink-soft);font-size:12px;display:block;margin-top:2px;}
+  .badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+  .badge{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.03em;padding:3px 8px;border-radius:10px;}
+  .badge.ok{background:#DDEAD4;color:var(--sage-deep);}
+  .badge.warn{background:#F0DFC8;color:#8A5A1F;}
+  .badge.hidden{background:#E9D7D0;color:var(--cotto);}
+  a.edit-link{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--sage-deep);text-decoration:none;white-space:nowrap;}
+  a.edit-link:hover{text-decoration:underline;}
+  .empty{padding:16px 18px;color:var(--ink-soft);font-size:13.5px;font-style:italic;}
+  .loading{color:var(--ink-soft);padding:40px 0;text-align:center;}
+</style>
+</head>
+<body>
+
+<a class="back" href="/admin/">← Torna al pannello</a>
+<h1>Mappa del sito</h1>
+<p class="sub">Tutte le pagine esistenti, pubblicate o no. "Modifica" ti porta dritto alla scheda giusta nel pannello.</p>
+
+<div id="content"><p class="loading">Carico la struttura del sito…</p></div>
+
+<script>
+  const GITHUB_USER = "micheleargalia-stack";
+  const GITHUB_REPO = "psicologi-monteverde";
+  const GITHUB_BRANCH = "main";
+
+  async function getJSON(path) {
+    const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}?t=${Date.now()}`);
+    if (!res.ok) throw new Error('not found');
+    return res.json();
+  }
+
+  async function listFolder(folder) {
+    try {
+      const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${folder}?ref=${GITHUB_BRANCH}`);
+      if (!res.ok) return [];
+      const files = await res.json();
+      if (!Array.isArray(files)) return [];
+      const jsonFiles = files.filter(f => f.name.endsWith('.json'));
+      const items = await Promise.all(jsonFiles.map(async f => {
+        const r = await fetch(f.download_url);
+        const data = await r.json();
+        data._slug = f.name.replace('.json', '');
+        return data;
+      }));
+      return items;
+    } catch (e) { return []; }
+  }
+
+  function editLink(collection, entry) {
+    return `/admin/#/collections/${collection}/entries/${entry}`;
+  }
+
+  function badges(item, extra) {
+    let out = '';
+    if (item.published === false) out += `<span class="badge warn">Bozza</span>`;
+    if (item.hideFromSearch) out += `<span class="badge hidden">Nascosta</span>`;
+    if (!out && !extra) out += `<span class="badge ok">Pubblicata</span>`;
+    return out;
+  }
+
+  function isLinked(url, home) {
+    const all = [...(home.menuItems || []), ...(home.footerLinks || [])];
+    return all.some(m => m.link === url);
+  }
+
+  function groupHTML(title, itemsHTML, linkedBadge) {
+    return `<section class="group"><h2>${title} ${linkedBadge || ''}</h2><ul>${itemsHTML || '<li class="empty">Nessun elemento</li>'}</ul></section>`;
+  }
+
+  (async () => {
+    const out = document.getElementById('content');
+    try {
+      const home = await getJSON('content/site/home.json');
+
+      // Homepage e sezioni fisse
+      let html = groupHTML('Homepage', `
+        <li><span class="item-name">index.html — sezioni: Chi siamo, Servizi, FAQ, Contatti</span><span class="badges"><span class="badge ok">Pubblicata</span></span><a class="edit-link" href="${editLink('pagine','home')}">Modifica →</a></li>
+      `);
+
+      html += groupHTML('Chi siamo', `
+        <li><span class="item-name">Profilo — Michele Argalia</span><span class="badges"><span class="badge ok">Pubblicata</span></span><a class="edit-link" href="${editLink('pagine','michele')}">Modifica →</a></li>
+        <li><span class="item-name">Profilo — Cecilia Belardelli</span><span class="badges"><span class="badge ok">Pubblicata</span></span><a class="edit-link" href="${editLink('pagine','cecilia')}">Modifica →</a></li>
+      `);
+
+      // Servizi
+      const serviziNames = [
+        ['psicoterapia-individuale','Psicoterapia Individuale'],
+        ['sostegno-genitorialita','Sostegno alla genitorialità'],
+        ['valutazione-psicologica','Valutazione Psicologica'],
+        ['psicoterapia-sociale','Psicoterapia Sociale — Spazio a Tutti']
+      ];
+      let serviziLi = '';
+      for (const [slug, label] of serviziNames) {
+        let data = {};
+        try { data = await getJSON(`content/site/servizio-${slug}.json`); } catch(e){}
+        const inHome = (home.services || []).some(s => s.slug === slug);
+        serviziLi += `<li><span class="item-name">${label}<span class="item-parent">servizio.html?s=${slug}</span></span><span class="badges">${badges(data)}<span class="${inHome ? 'in-menu' : 'not-in-menu'}">${inHome ? 'Card in home' : 'Non in home'}</span></span><a class="edit-link" href="${editLink('servizi',slug)}">Modifica →</a></li>`;
+      }
+      html += groupHTML('Servizi', serviziLi);
+
+      // Dizionario
+      const dizionario = await listFolder('content/dizionario');
+      let dizLi = '';
+      dizionario.sort((a,b) => (a.title||'').localeCompare(b.title||''));
+      dizionario.forEach(d => {
+        dizLi += `<li><span class="item-name">${d.title}</span><span class="badges">${badges(d)}</span><a class="edit-link" href="${editLink('dizionario', d._slug)}">Modifica →</a></li>`;
+      });
+      html += groupHTML('Dizionario Psy', dizLi, `<span class="${isLinked('dizionario.html', home) ? 'in-menu' : 'not-in-menu'}">${isLinked('dizionario.html', home) ? 'Nel menu' : 'Non nel menu'}</span>`);
+
+      // Articoli
+      const articoli = await listFolder('content/articoli');
+      let artLi = '';
+      articoli.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+      articoli.forEach(a => {
+        artLi += `<li><span class="item-name">${a.title}<span class="item-parent">${a.date || ''}</span></span><span class="badges">${badges(a)}</span><a class="edit-link" href="${editLink('articoli', a._slug)}">Modifica →</a></li>`;
+      });
+      html += groupHTML('Articoli', artLi, `<span class="${isLinked('articoli.html', home) ? 'in-menu' : 'not-in-menu'}">${isLinked('articoli.html', home) ? 'Nel menu' : 'Non nel menu'}</span>`);
+
+      // Documenti
+      const documenti = await listFolder('content/documenti');
+      let docLi = '';
+      documenti.forEach(d => {
+        docLi += `<li><span class="item-name">${d.title}</span><span class="badges">${badges(d)}</span><a class="edit-link" href="${editLink('documenti', d._slug)}">Modifica →</a></li>`;
+      });
+      html += groupHTML('Documenti', docLi, `<span class="${isLinked('documenti.html', home) ? 'in-menu' : 'not-in-menu'}">${isLinked('documenti.html', home) ? 'Nel menu' : 'Non nel menu'}</span>`);
+
+      // Pagine libere
+      const pagineLibere = await listFolder('content/pagine-libere');
+      let plLi = '';
+      pagineLibere.forEach(p => {
+        const parentInfo = p.parentLabel ? `<span class="item-parent">sotto: ${p.parentLabel}</span>` : '';
+        plLi += `<li><span class="item-name">${p.title}${parentInfo}</span><span class="badges">${badges(p)}</span><a class="edit-link" href="${editLink('pagine-libere', p._slug)}">Modifica →</a></li>`;
+      });
+      html += groupHTML('Pagine libere', plLi);
+
+      out.innerHTML = html;
+    } catch (e) {
+      out.innerHTML = `<p class="empty">Errore nel caricamento della mappa: ${e.message}</p>`;
+    }
+  })();
+</script>
+
+</body>
+</html>

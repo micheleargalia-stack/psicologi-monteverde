@@ -151,10 +151,12 @@
         return data;
       }));
       entries.sort((a, b) => a.title.localeCompare(b.title));
+      const visibleEntries = entries.filter(e => !e.hideFromSearch);
+      if (visibleEntries.length === 0) throw new Error('nessuna voce visibile');
 
       emptyEl.style.display = 'none';
       listEl.style.display = 'grid';
-      listEl.innerHTML = entries.map(e => `
+      listEl.innerHTML = visibleEntries.map(e => `
         <div class="person">
           <h3>${e.title}</h3>
           <p>${(e.metaDescription || '').slice(0, 160)}</p>

@@ -6,14 +6,30 @@
   <meta name="robots" content="noindex, nofollow" />
   <title>Admin — Psicologi Monteverde</title>
   <style>
-    body { font-family: sans-serif; background:#E8E3D8; color:#202B23; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
-    #loading-msg { text-align:center; max-width: 360px; }
+    body { font-family: sans-serif; background:#E8E3D8; color:#202B23; margin:0; padding:60px 20px; box-sizing:border-box; }
+    #login-box { max-width: 360px; margin: 0 auto; text-align:center; }
+    #login-box h1 { font-size: 20px; margin-bottom: 24px; }
+    #status-text { margin-bottom: 18px; color:#5B6459; }
+    #status-text.err { color:#A1553A; font-weight:bold; }
+    input { width:100%; box-sizing:border-box; padding:11px 13px; margin-bottom:12px; border:1px solid #C9C2AC; border-radius:4px; font-size:16px; }
+    button { width:100%; font-family:sans-serif; font-size:16px; padding:12px 24px; background:#43512F; color:#F5F2EA; border:none; border-radius:4px; cursor:pointer; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
+    #relogin-btn { margin-top:24px; background:transparent; color:#5B6459; border:1px solid #C9C2AC; font-size:13px; padding:8px 16px; }
   </style>
 </head>
 <body>
-  <div id="loading-msg">
+  <div id="login-box">
+    <h1>Psicologi Monteverde — Admin</h1>
     <p id="status-text">Caricamento…</p>
-    <button id="login-btn" style="display:none;font-family:sans-serif;font-size:16px;padding:12px 24px;background:#43512F;color:#F5F2EA;border:none;border-radius:4px;cursor:pointer;margin-top:12px;">Accedi</button>
+
+    <form id="login-form" style="display:none;">
+      <input type="email" id="email" placeholder="Email" required autocomplete="username">
+      <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+      <button type="submit" id="submit-btn">Accedi</button>
+    </form>
+
+    <button id="relogin-btn" style="display:none;">Esci e riprova (sessione bloccata)</button>
+    <p style="margin-top:28px;"><a href="/admin/mappa.html" style="font-family:sans-serif;font-size:13px;color:#5B6459;">🗺️ Mappa del sito (tutte le pagine)</a></p>
   </div>
 
   <!-- Impedisce a Decap CMS di caricarsi da solo: lo avviamo noi dopo aver letto il ruolo -->
@@ -25,6 +41,14 @@
 
   <script>
     const statusText = document.getElementById('status-text');
+    const loginForm = document.getElementById('login-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const reloginBtn = document.getElementById('relogin-btn');
+
+    function setStatus(msg, isError) {
+      statusText.textContent = msg;
+      statusText.className = isError ? 'err' : '';
+    }
 
     // Quali collezioni può vedere ogni ruolo.
     // "admin" vede sempre tutto, qualunque altra collezione venga aggiunta in futuro.
@@ -35,7 +59,7 @@
     };
 
     function getAllowedCollections(roles) {
-      if (!roles || roles.length === 0) return []; // nessun ruolo assegnato = nessun accesso
+      if (!roles || roles.length === 0) return [];
       if (roles.includes('admin')) return null;
       let allowed = new Set();
       roles.forEach(r => {
@@ -49,37 +73,73 @@
       const allowed = getAllowedCollections(roles);
 
       if (allowed !== null && allowed.length === 0) {
-        statusText.innerHTML = 'Il tuo utente non ha ancora un ruolo assegnato.<br>Chiedi all\'amministratore di assegnartelo dalla pagina Identity di Netlify.';
+        setStatus('Il tuo utente non ha ancora un ruolo assegnato, oppure la sessione è obsoleta.', true);
+        loginForm.style.display = 'none';
+        reloginBtn.style.display = 'block';
         return;
       }
 
-      const yamlText = await (await fetch('/admin/config.yml')).text();
-      const config = jsyaml.load(yamlText);
-
-      if (allowed !== null) {
-        config.collections = config.collections.filter(c => allowed.includes(c.name));
+      try {
+        const yamlText = await (await fetch('/admin/config.yml')).text();
+        const config = jsyaml.load(yamlText);
+        if (allowed !== null) {
+          config.collections = config.collections.filter(c => allowed.includes(c.name));
+        }
+        document.getElementById('login-box').style.display = 'none';
+        CMS.init({ config });
+      } catch (e) {
+        setStatus('Errore nel caricamento del pannello: ' + e.message, true);
       }
-
-      document.getElementById('loading-msg').style.display = 'none';
-      CMS.init({ config });
     }
 
+    reloginBtn.addEventListener('click', () => {
+      window.netlifyIdentity.logout().then(() => location.reload());
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Accesso in corso…';
+      setStatus('', false);
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      window.netlifyIdentity.gotrue.login(email, password, true)
+        .then(user => {
+          setStatus('Accesso riuscito, carico il pannello…', false);
+          startCMS(user);
+        })
+        .catch(err => {
+          setStatus('Accesso non riuscito: ' + (err.message || 'email o password errati.'), true);
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Accedi';
+        });
+    });
+
     if (window.netlifyIdentity) {
-      document.getElementById('login-btn').addEventListener('click', () => window.netlifyIdentity.open());
       window.netlifyIdentity.on('init', user => {
         if (user) {
+          setStatus('Sessione trovata, verifico l\'accesso…', false);
           startCMS(user);
         } else {
-          statusText.textContent = 'Effettua il login…';
-          document.getElementById('login-btn').style.display = 'inline-block';
-          window.netlifyIdentity.open();
+          setStatus('Inserisci le tue credenziali per accedere.', false);
+          loginForm.style.display = 'block';
         }
       });
-      window.netlifyIdentity.on('login', user => {
-        window.netlifyIdentity.close();
-        startCMS(user);
+      window.netlifyIdentity.on('error', err => {
+        setStatus('Errore del sistema di login: ' + (err && err.message ? err.message : String(err)), true);
+        loginForm.style.display = 'block';
       });
       window.netlifyIdentity.init();
+      // Se dopo 6 secondi non è successo nulla (script non inizializzato), mostra comunque il modulo
+      setTimeout(() => {
+        if (loginForm.style.display === 'none' && document.getElementById('login-box').style.display !== 'none') {
+          setStatus('Inserisci le tue credenziali per accedere.', false);
+          loginForm.style.display = 'block';
+        }
+      }, 6000);
+    } else {
+      setStatus('Il sistema di login non si è caricato. Ricarica la pagina o riprova tra poco.', true);
     }
   </script>
 </body>
