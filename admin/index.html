@@ -70,7 +70,15 @@
       return Array.from(allowed);
     }
 
+    // Netlify Identity può segnalare l'utente loggato più di una volta per lo
+    // stesso accesso (es. sia dal submit del form sia dall'evento 'init' del
+    // widget). Decap CMS non tollera un secondo CMS.init() nella stessa
+    // pagina — questa guardia impedisce che startCMS() lo avvii due volte.
+    let cmsInitialized = false;
+
     async function startCMS(user) {
+      if (cmsInitialized) return;
+
       // Normalizzato in minuscolo: su Netlify il ruolo può essere digitato
       // "Admin", "ADMIN", ecc. — il confronto non deve dipendere da questo.
       const roles = ((user && user.app_metadata && user.app_metadata.roles) || []).map(r => String(r).trim().toLowerCase());
@@ -89,6 +97,7 @@
         if (allowed !== null) {
           config.collections = config.collections.filter(c => allowed.includes(c.name));
         }
+        cmsInitialized = true;
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('mappa-link').style.display = 'block';
         CMS.init({ config });
