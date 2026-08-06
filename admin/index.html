@@ -60,7 +60,12 @@
 
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <!-- Versione fissata (non "^3.0.0" fluttuante): la 3.15.1 attuale
+       carica al suo interno decap-cms-core 3.17.1, che ha un bug noto e
+       documentato nel controllo di unicità delle collezioni (vedi
+       https://github.com/ajv-validator/ajv-keywords/pull/123, ancora
+       aperto). La 3.13.0 è una versione precedente più collaudata. -->
+  <script src="https://unpkg.com/decap-cms@3.13.0/dist/decap-cms.js"></script>
 
   <script>
     const statusText = document.getElementById('status-text');
