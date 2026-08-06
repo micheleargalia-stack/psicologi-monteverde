@@ -90,7 +90,13 @@
     let cmsInitialized = false;
 
     async function startCMS(user) {
+      // Va impostato QUI, subito, prima di qualunque await: se lo si
+      // imposta più avanti (es. dopo la fetch del config.yml) due chiamate
+      // ravvicinate a startCMS() passano entrambe il controllo prima che la
+      // prima abbia segnato "avviato", e la corsa non viene bloccata — è
+      // esattamente quello che causava il doppio CMS.init().
       if (cmsInitialized) return;
+      cmsInitialized = true;
 
       // Normalizzato in minuscolo: su Netlify il ruolo può essere digitato
       // "Admin", "ADMIN", ecc. — il confronto non deve dipendere da questo.
@@ -110,7 +116,6 @@
         if (allowed !== null) {
           config.collections = config.collections.filter(c => allowed.includes(c.name));
         }
-        cmsInitialized = true;
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('mappa-link').style.display = 'block';
         // Il widget Identity aggiunge un iframe a schermo intero (nascosto,
