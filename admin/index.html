@@ -46,6 +46,18 @@
   <!-- Impedisce a Decap CMS di caricarsi da solo: lo avviamo noi dopo aver letto il ruolo -->
   <script>window.CMS_MANUAL_INIT = true;</script>
 
+  <!-- Il widget Identity, una volta caricato, elabora DA SOLO un eventuale
+       #invite_token=/#recovery_token=/ecc. nell'URL — in parallelo alla
+       nostra gestione più sotto. I due tentativi sullo stesso token in
+       parallelo sono la causa reale dei crash del pannello. Catturiamo il
+       token qui, PRIMA che lo script del widget venga anche solo caricato,
+       e svuotiamo subito l'URL: così il widget non trova più nulla da
+       elaborare, e resta solo la nostra gestione esplicita più sotto. -->
+  <script>
+    window.__authTokenMatch = (location.hash || '').match(/(confirmation|invite|recovery|email_change)_token=([^&]+)/);
+    if (window.__authTokenMatch) location.hash = '';
+  </script>
+
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
@@ -169,10 +181,13 @@
     }
 
     function handleAuthTokenInHash() {
-      const match = (location.hash || '').match(/(confirmation|invite|recovery|email_change)_token=([^&]+)/);
+      // Catturato prima ancora che il widget Identity si caricasse (vedi
+      // in cima al file) — non si rilegge l'URL qui perché è già stato
+      // svuotato apposta.
+      const match = window.__authTokenMatch;
+      window.__authTokenMatch = null;
       if (!match) return false;
       const [, type, token] = match;
-      location.hash = '';
 
       if (type === 'invite') {
         pendingInviteToken = token;
