@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<!-- Le email di invito/recupero password di Netlify Identity puntano
+     alla home, non a /admin/. Qui la pagina non ha la gestione affidabile
+     di quei link (solo il popup di Netlify, che si è dimostrato
+     inaffidabile) — quindi si rimanda subito a /admin/ portando con sé
+     lo stesso link, prima che il popup possa anche solo apparire. -->
+<script>
+  if (/[#&](confirmation|invite|recovery|email_change)_token=/.test(location.hash)) {
+    location.replace('/admin/' + location.hash);
+  }
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Psicologi Monteverde — Studio di Psicologia e Psicoterapia a Roma</title>
