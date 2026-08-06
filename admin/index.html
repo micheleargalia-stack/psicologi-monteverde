@@ -136,6 +136,8 @@
         // crash "removeChild" all'avvio. Non serve più da qui in poi: via.
         const identityIframe = document.getElementById('netlify-identity-widget');
         if (identityIframe) identityIframe.remove();
+        console.log('[debug] ruoli utente:', roles, '— collezioni permesse:', allowed);
+        console.log('[debug] nomi collezioni passati a CMS.init:', config.collections.map(c => c.name));
         CMS.init({ config });
       } catch (e) {
         setStatus('Errore nel caricamento del pannello: ' + e.message, true);
