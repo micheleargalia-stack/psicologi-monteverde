@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /
+
+# Sito ancora in costruzione, dominio pubblico ancora su Wix.
+# Quando il trasloco del dominio sarà completato, sostituire con:
+#
+# User-agent: *
+# Disallow: /admin/
+# Sitemap: https://psicologimonteverde.com/sitemap.xml
