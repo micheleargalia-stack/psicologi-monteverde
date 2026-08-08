@@ -17,6 +17,7 @@ collections:
       - name: "home"
         label: "Homepage"
         file: "content/site/home.json"
+        preview_path: "index.html"
         fields:
           - label: "Voci del menu (in alto)"
             name: "menuItems"
@@ -81,6 +82,7 @@ collections:
       - name: "michele"
         label: "Profilo — Michele Argalia"
         file: "content/site/michele.json"
+        preview_path: "michele-argalia.html"
         fields:
           - { label: "Ruolo", name: "role", widget: "string" }
           - { label: "Foto (formato verticale, va bene anche uno smartphone)", name: "photo", widget: "image", required: false }
@@ -98,6 +100,7 @@ collections:
       - name: "cecilia"
         label: "Profilo — Cecilia Belardelli"
         file: "content/site/cecilia.json"
+        preview_path: "cecilia-belardelli.html"
         fields:
           - { label: "Ruolo", name: "role", widget: "string" }
           - { label: "Foto (formato verticale, va bene anche uno smartphone)", name: "photo", widget: "image", required: false }
@@ -118,6 +121,7 @@ collections:
       - name: "psicoterapia-individuale"
         label: "Psicoterapia Individuale"
         file: "content/site/servizio-psicoterapia-individuale.json"
+        preview_path: "psicoterapia-individuale"
         fields:
           - { label: "Titolo", name: "title", widget: "string" }
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
@@ -127,6 +131,7 @@ collections:
       - name: "sostegno-genitorialita"
         label: "Sostegno alla genitorialità"
         file: "content/site/servizio-sostegno-genitorialita.json"
+        preview_path: "sostegno-genitorialita"
         fields:
           - { label: "Titolo", name: "title", widget: "string" }
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
@@ -136,6 +141,7 @@ collections:
       - name: "valutazione-psicologica"
         label: "Valutazione Psicologica"
         file: "content/site/servizio-valutazione-psicologica.json"
+        preview_path: "valutazione-psicologica"
         fields:
           - { label: "Titolo", name: "title", widget: "string" }
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
@@ -145,6 +151,7 @@ collections:
       - name: "psicoterapia-sociale"
         label: "Psicoterapia Sociale — Spazio a Tutti"
         file: "content/site/servizio-psicoterapia-sociale.json"
+        preview_path: "psicoterapia-sociale"
         fields:
           - { label: "Titolo", name: "title", widget: "string" }
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
@@ -160,6 +167,7 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: "json"
     format: "json"
+    preview_path: "articolo.html?slug={{slug}}"
     fields:
       - { label: "Titolo", name: "title", widget: "string" }
       - { label: "Data", name: "date", widget: "datetime", format: "YYYY-MM-DD", picker_utc: true }
@@ -191,6 +199,7 @@ collections:
     slug: "{{slug}}"
     extension: "json"
     format: "json"
+    preview_path: "dizionario-voce.html?slug={{slug}}"
     fields:
       - { label: "Titolo", name: "title", widget: "string" }
       - { label: "Testo", name: "body", widget: "markdown" }
@@ -205,6 +214,7 @@ collections:
     slug: "{{slug}}"
     extension: "json"
     format: "json"
+    preview_path: "pagina.html?slug={{slug}}"
     fields:
       - { label: "Titolo", name: "title", widget: "string" }
       - { label: "Pubblicata", name: "published", widget: "boolean", default: true, hint: "Disattiva per salvare una bozza senza pubblicarla sul sito" }
