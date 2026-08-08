@@ -136,7 +136,9 @@
 
   async function loadService() {
     const params = new URLSearchParams(window.location.search);
-    const s = params.get('s');
+    // Con l'indirizzo pulito (es. /psicoterapia-individuale) non c'è più
+    // ?s= nell'URL: lo slug si legge allora dal percorso stesso.
+    const s = params.get('s') || window.location.pathname.replace(/^\/|\/$/g, '');
     if (!s) return;
     try {
       const url = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/content/site/servizio-${s}.json?t=${Date.now()}`;

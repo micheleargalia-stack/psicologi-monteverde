@@ -1,3 +1,11 @@
+# Indirizzi puliti per le pagine servizio (es. /psicoterapia-individuale
+# invece di /servizio.html?s=psicoterapia-individuale). 200 = "riscrivi"
+# (l'indirizzo nella barra resta quello pulito), non un redirect.
+/psicoterapia-individuale                                                           /servizio.html   200
+/sostegno-genitorialita                                                             /servizio.html   200
+/valutazione-psicologica                                                            /servizio.html   200
+/psicoterapia-sociale                                                               /servizio.html   200
+
 # Redirect dal vecchio sito Wix (psicologimonteverde.com) al sito nuovo.
 # Attivo quando il dominio verrà spostato qui. Formato: vecchio-indirizzo  nuovo-indirizzo  301
 
@@ -5,10 +13,9 @@
 /michele-argalia-psicologo                                                          /michele-argalia.html   301
 /dottoressa-cecilia-belardelli                                                      /cecilia-belardelli.html   301
 /nostri-servizi                                                                     /index.html#servizi   301
-/psicoterapia-individuale                                                           /servizio.html?s=psicoterapia-individuale   301
-/sostegno-genitorialita-touchpoints                                                 /servizio.html?s=sostegno-genitorialita   301
-/valutazionepsicologica                                                             /servizio.html?s=valutazione-psicologica   301
-/servizio-di-psicoterapia-sociale                                                   /servizio.html?s=psicoterapia-sociale   301
+/sostegno-genitorialita-touchpoints                                                 /sostegno-genitorialita   301
+/valutazionepsicologica                                                             /valutazione-psicologica   301
+/servizio-di-psicoterapia-sociale                                                   /psicoterapia-sociale   301
 /contatti                                                                           /index.html#contatti   301
 /dove-siamo                                                                         /index.html#contatti   301
 /i-nostri-articoli                                                                  /articoli.html   301

@@ -15,6 +15,13 @@
     button { width:100%; font-family:sans-serif; font-size:16px; padding:12px 24px; background:#43512F; color:#F5F2EA; border:none; border-radius:4px; cursor:pointer; }
     button:disabled { opacity:.6; cursor:not-allowed; }
     #relogin-btn { margin-top:24px; background:transparent; color:#5B6459; border:1px solid #C9C2AC; font-size:13px; padding:8px 16px; }
+
+    /* La barra degli strumenti dell'editor di testo (grassetto, corsivo,
+       link, ecc.) va a capo in colonna quando lo spazio è stretto, invece
+       di restare una riga orizzontale — [role="toolbar"] è un attributo
+       di accessibilità stabile di Decap, più affidabile di una classe CSS
+       generata che può cambiare da una versione all'altra. */
+    [role="toolbar"] { flex-direction: row !important; flex-wrap: wrap !important; height: auto !important; width: auto !important; }
   </style>
 </head>
 <body>
@@ -146,6 +153,10 @@
         }
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('mappa-link').style.display = 'block';
+        // Anteprima con lo stesso font/colori del sito vero, invece del
+        // testo grezzo generico di Decap — non è un clone della pagina,
+        // solo molto più leggibile.
+        CMS.registerPreviewStyle('/style.css');
         // Il widget Identity aggiunge un iframe a schermo intero (nascosto,
         // usato solo per il suo popup di login che qui non impieghiamo mai)
         // che entra in conflitto col rendering di Decap CMS e causa un

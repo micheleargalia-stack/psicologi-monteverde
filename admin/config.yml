@@ -2,6 +2,10 @@ backend:
   name: git-gateway
   branch: main
 
+# Salvare non pubblica più subito: le bozze restano visibili solo nella
+# scheda "Workflow" del pannello finché non vengono pubblicate a mano.
+publish_mode: editorial_workflow
+
 # Dove vengono salvate le immagini caricate dal pannello
 media_folder: "images/articoli"
 public_folder: "/images/articoli"
@@ -14,6 +18,12 @@ collections:
         label: "Homepage"
         file: "content/site/home.json"
         fields:
+          - label: "Voci del menu (in alto)"
+            name: "menuItems"
+            widget: "list"
+            fields:
+              - { label: "Testo", name: "label", widget: "string" }
+              - { label: "Collegamento", name: "link", widget: "string", hint: "Es. index.html#servizi, dizionario.html, pagina.html?slug=nome-pagina" }
           - { label: "Testo sopra il titolo", name: "heroEyebrow", widget: "string" }
           - { label: "Titolo principale (usa *asterischi* per il corsivo)", name: "heroTitle", widget: "string" }
           - { label: "Sottotitolo (puoi inserire link con [testo](indirizzo))", name: "heroSubtitle", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
@@ -22,14 +32,27 @@ collections:
           - { label: "Titolo sezione Chi siamo", name: "teamTitle", widget: "string" }
           - { label: "Sopra-titolo sezione Servizi", name: "servicesEyebrow", widget: "string" }
           - { label: "Titolo sezione Servizi", name: "servicesTitle", widget: "string" }
-          - { label: "Sopra-titolo sezione Contatti", name: "contactEyebrow", widget: "string" }
-          - { label: "Titolo sezione Contatti", name: "contactTitle", widget: "string" }
-          - label: "Voci del menu (in alto)"
-            name: "menuItems"
+          - label: "Servizi (le 4 card della home)"
+            name: "services"
             widget: "list"
             fields:
-              - { label: "Testo", name: "label", widget: "string" }
-              - { label: "Collegamento", name: "link", widget: "string", hint: "Es. index.html#servizi, dizionario.html, pagina.html?slug=nome-pagina" }
+              - { label: "Titolo servizio", name: "title", widget: "string" }
+              - { label: "Descrizione (puoi inserire link con [testo](indirizzo))", name: "description", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+              - { label: "Collegamento a pagina dedicata (lascia vuoto se non ne ha una)", name: "slug", widget: "string", required: false, hint: "Es. psicoterapia-individuale — deve corrispondere a un file in Pagine servizi" }
+          - label: "Domande frequenti"
+            name: "faq"
+            widget: "list"
+            fields:
+              - { label: "Domanda", name: "question", widget: "string" }
+              - { label: "Risposta (puoi inserire link)", name: "answer", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
+          - { label: "Sopra-titolo sezione Contatti", name: "contactEyebrow", widget: "string" }
+          - { label: "Titolo sezione Contatti", name: "contactTitle", widget: "string" }
+          - { label: "Indirizzo", name: "contactAddress", widget: "string" }
+          - { label: "Telefono", name: "contactPhone", widget: "string" }
+          - { label: "Testo alternativo per i pulsanti WhatsApp (lascia vuoto per mostrare il numero)", name: "whatsappLabel", widget: "string", required: false, hint: "Es. \"Scrivici su WhatsApp\" invece del numero in bella vista" }
+          - { label: "Email", name: "contactEmail", widget: "string" }
+          - { label: "Orari (una riga per giorno, formato \"Giorno: orario\")", name: "contactHours", widget: "text" }
+          - { label: "Testo descrittivo nel footer", name: "footerTagline", widget: "text" }
           - label: "Link utili del footer (in basso)"
             name: "footerLinks"
             widget: "list"
@@ -42,21 +65,8 @@ collections:
             fields:
               - { label: "Testo", name: "label", widget: "string" }
               - { label: "Collegamento", name: "link", widget: "string" }
-          - { label: "Testo descrittivo nel footer", name: "footerTagline", widget: "text" }
-          - label: "Servizi (le 4 card della home)"
-            name: "services"
-            widget: "list"
-            fields:
-              - { label: "Titolo servizio", name: "title", widget: "string" }
-              - { label: "Descrizione (puoi inserire link con [testo](indirizzo))", name: "description", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
-              - { label: "Collegamento a pagina dedicata (lascia vuoto se non ne ha una)", name: "slug", widget: "string", required: false, hint: "Es. psicoterapia-individuale — deve corrispondere a un file in Pagine servizi" }
-          - { label: "Indirizzo", name: "contactAddress", widget: "string" }
-          - { label: "Telefono", name: "contactPhone", widget: "string" }
-          - { label: "Testo alternativo per i pulsanti WhatsApp (lascia vuoto per mostrare il numero)", name: "whatsappLabel", widget: "string", required: false, hint: "Es. \"Scrivici su WhatsApp\" invece del numero in bella vista" }
-          - { label: "Email", name: "contactEmail", widget: "string" }
-          - { label: "Orari (una riga per giorno, formato \"Giorno: orario\")", name: "contactHours", widget: "text" }
-          - { label: "Descrizione per Google (SEO, 1-2 frasi)", name: "metaDescription", widget: "text", required: false }
-          - { label: "Immagine di anteprima social (quando il sito viene condiviso su WhatsApp/Facebook)", name: "ogImage", widget: "image", required: false }
+          - { label: "SEO — Descrizione per Google (1-2 frasi)", name: "metaDescription", widget: "text", required: false }
+          - { label: "SEO avanzato — Immagine di anteprima social (quando il sito viene condiviso su WhatsApp/Facebook)", name: "ogImage", widget: "image", required: false }
           - label: "Aspetto del sito"
             name: "theme"
             widget: "object"
@@ -68,12 +78,6 @@ collections:
                 widget: "select"
                 default: "Fraunces"
                 options: ["Fraunces", "Playfair Display", "Lora"]
-          - label: "Domande frequenti"
-            name: "faq"
-            widget: "list"
-            fields:
-              - { label: "Domanda", name: "question", widget: "string" }
-              - { label: "Risposta (puoi inserire link)", name: "answer", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
       - name: "michele"
         label: "Profilo — Michele Argalia"
         file: "content/site/michele.json"
@@ -118,8 +122,8 @@ collections:
           - { label: "Titolo", name: "title", widget: "string" }
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Testo della pagina", name: "body", widget: "markdown" }
-          - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
-          - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
+          - { label: "SEO — Descrizione per Google", name: "metaDescription", widget: "text", required: false }
+          - { label: "SEO avanzato — Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
       - name: "sostegno-genitorialita"
         label: "Sostegno alla genitorialità"
         file: "content/site/servizio-sostegno-genitorialita.json"
@@ -127,8 +131,8 @@ collections:
           - { label: "Titolo", name: "title", widget: "string" }
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Testo della pagina", name: "body", widget: "markdown" }
-          - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
-          - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
+          - { label: "SEO — Descrizione per Google", name: "metaDescription", widget: "text", required: false }
+          - { label: "SEO avanzato — Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
       - name: "valutazione-psicologica"
         label: "Valutazione Psicologica"
         file: "content/site/servizio-valutazione-psicologica.json"
@@ -136,8 +140,8 @@ collections:
           - { label: "Titolo", name: "title", widget: "string" }
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Testo della pagina", name: "body", widget: "markdown" }
-          - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
-          - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
+          - { label: "SEO — Descrizione per Google", name: "metaDescription", widget: "text", required: false }
+          - { label: "SEO avanzato — Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
       - name: "psicoterapia-sociale"
         label: "Psicoterapia Sociale — Spazio a Tutti"
         file: "content/site/servizio-psicoterapia-sociale.json"
@@ -145,8 +149,8 @@ collections:
           - { label: "Titolo", name: "title", widget: "string" }
           - { label: "Sottotitolo / frase in evidenza", name: "intro", widget: "markdown", minimal: true, buttons: ["bold", "italic", "link"] }
           - { label: "Testo della pagina", name: "body", widget: "markdown" }
-          - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
-          - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
+          - { label: "SEO — Descrizione per Google", name: "metaDescription", widget: "text", required: false }
+          - { label: "SEO avanzato — Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
 
   - name: "articoli"
     label: "Articoli"
@@ -162,8 +166,8 @@ collections:
       - { label: "Estratto (2-3 righe, appare nell'elenco)", name: "excerpt", widget: "text" }
       - { label: "Contenuto", name: "body", widget: "markdown" }
       - { label: "Immagine di copertina", name: "image", widget: "image", required: false }
-      - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "L'articolo resta visibile sul sito ma escluso da Google" }
       - { label: "Pubblicato", name: "published", widget: "boolean", default: false, hint: "Un amministratore o editor deve attivarlo perché l'articolo vada online — è il passaggio di revisione" }
+      - { label: "SEO avanzato — Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "L'articolo resta visibile sul sito ma escluso da Google" }
 
   - name: "documenti"
     label: "Documenti"
@@ -177,7 +181,7 @@ collections:
       - { label: "Titolo (es. Modulo di consenso informato)", name: "title", widget: "string" }
       - { label: "Descrizione breve", name: "description", widget: "text", required: false }
       - { label: "File (PDF o Word)", name: "file", widget: "file" }
-      - { label: "Nascondi (dalla pagina Documenti e da Google)", name: "hideFromSearch", widget: "boolean", default: false }
+      - { label: "SEO avanzato — Nascondi (dalla pagina Documenti e da Google)", name: "hideFromSearch", widget: "boolean", default: false }
 
   - name: "dizionario"
     label: "Dizionario Psy"
@@ -189,9 +193,9 @@ collections:
     format: "json"
     fields:
       - { label: "Titolo", name: "title", widget: "string" }
-      - { label: "Meta-descrizione (per Google, 1-2 frasi)", name: "metaDescription", widget: "text" }
       - { label: "Testo", name: "body", widget: "markdown" }
-      - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
+      - { label: "SEO — Meta-descrizione (per Google, 1-2 frasi)", name: "metaDescription", widget: "text" }
+      - { label: "SEO avanzato — Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
 
   - name: "pagine-libere"
     label: "Pagine libere"
@@ -203,9 +207,9 @@ collections:
     format: "json"
     fields:
       - { label: "Titolo", name: "title", widget: "string" }
+      - { label: "Pubblicata", name: "published", widget: "boolean", default: true, hint: "Disattiva per salvare una bozza senza pubblicarla sul sito" }
       - { label: "Pagina 'genitore' (facoltativo, es. Servizi — appare come percorso in cima alla pagina)", name: "parentLabel", widget: "string", required: false }
       - { label: "Collegamento della pagina genitore (facoltativo)", name: "parentLink", widget: "string", required: false }
       - { label: "Testo della pagina", name: "body", widget: "markdown" }
-      - { label: "Descrizione per Google (SEO)", name: "metaDescription", widget: "text", required: false }
-      - { label: "Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
-      - { label: "Pubblicata", name: "published", widget: "boolean", default: true, hint: "Disattiva per salvare una bozza senza pubblicarla sul sito" }
+      - { label: "SEO — Descrizione per Google", name: "metaDescription", widget: "text", required: false }
+      - { label: "SEO avanzato — Nascondi dai motori di ricerca", name: "hideFromSearch", widget: "boolean", default: false, hint: "Attiva per tenere la pagina online e raggiungibile via link, ma esclusa da Google" }
