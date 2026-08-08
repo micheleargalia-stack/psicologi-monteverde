@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,17 +11,16 @@
     #login-box h1 { font-size: 20px; margin-bottom: 24px; }
     #status-text { margin-bottom: 18px; color:#5B6459; }
     #status-text.err { color:#A1553A; font-weight:bold; }
-    input { width:100%; box-sizing:border-box; padding:11px 13px; margin-bottom:12px; border:1px solid #C9C2AC; border-radius:4px; font-size:16px; }
-    button { width:100%; font-family:sans-serif; font-size:16px; padding:12px 24px; background:#43512F; color:#F5F2EA; border:none; border-radius:4px; cursor:pointer; }
-    button:disabled { opacity:.6; cursor:not-allowed; }
+    /* Delimitate a #login-box: queste regole non devono uscire da lì —
+       una volta che Decap prende il controllo della pagina, "input" e
+       "button" non delimitati si applicavano anche ai suoi pulsanti,
+       comprese le minuscole icone della barra di formattazione del
+       testo (grassetto/corsivo/link), forzate a tutta larghezza e
+       impilate una sopra l'altra invece che in riga. Era questo. */
+    #login-box input { width:100%; box-sizing:border-box; padding:11px 13px; margin-bottom:12px; border:1px solid #C9C2AC; border-radius:4px; font-size:16px; }
+    #login-box button { width:100%; font-family:sans-serif; font-size:16px; padding:12px 24px; background:#43512F; color:#F5F2EA; border:none; border-radius:4px; cursor:pointer; }
+    #login-box button:disabled { opacity:.6; cursor:not-allowed; }
     #relogin-btn { margin-top:24px; background:transparent; color:#5B6459; border:1px solid #C9C2AC; font-size:13px; padding:8px 16px; }
-
-    /* La barra degli strumenti dell'editor di testo (grassetto, corsivo,
-       link, ecc.) va a capo in colonna quando lo spazio è stretto, invece
-       di restare una riga orizzontale — [role="toolbar"] è un attributo
-       di accessibilità stabile di Decap, più affidabile di una classe CSS
-       generata che può cambiare da una versione all'altra. */
-    [role="toolbar"] { flex-direction: row !important; flex-wrap: wrap !important; height: auto !important; width: auto !important; }
   </style>
 </head>
 <body>
@@ -153,6 +152,11 @@
         }
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('mappa-link').style.display = 'block';
+        // Anche il padding/sfondo del <body>, pensati per il solo modulo
+        // di login, vanno tolti — Decap gestisce la sua interfaccia a
+        // pieno schermo e non deve trovarsi dentro quella cornice.
+        document.body.style.padding = '0';
+        document.body.style.background = 'none';
         // Anteprima con lo stesso font/colori del sito vero, invece del
         // testo grezzo generico di Decap — non è un clone della pagina,
         // solo molto più leggibile.
